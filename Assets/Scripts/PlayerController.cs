@@ -10,11 +10,13 @@ public class PlayerController : MonoBehaviour
 
     public GameObject camHolder;
 
-    public float speed, sensitivity, maxForce;
+    public float speed, sensitivity, maxForce, jumpForce;
 
     private Vector2 move, look;
 
     private float lookRotation;
+
+    public bool grounded;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -24,6 +26,11 @@ public class PlayerController : MonoBehaviour
     public void OnLook(InputAction.CallbackContext context)
     {
         look = context.ReadValue<Vector2>();
+    }
+    
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        Jump();
     }
 
     private void FixedUpdate()
@@ -43,27 +50,50 @@ public class PlayerController : MonoBehaviour
         
         //Calculate forces
         Vector3 velocityChange = targetVelocity - currentVelocity;
-        
+        velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
         //limit force
         Vector3.ClampMagnitude(velocityChange, maxForce);
         rb.AddForce(velocityChange, ForceMode.VelocityChange );
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void LateUpdate()
+    void Look()
     {
         //Turn
         transform.Rotate(Vector3.up * look.x * sensitivity);
         
         //Look
         lookRotation += (-look.y * sensitivity);
+        lookRotation = Mathf.Clamp(lookRotation, -90, 90);
         camHolder.transform.eulerAngles = new Vector3(lookRotation, camHolder.transform.eulerAngles.y,
             camHolder.transform.eulerAngles.z);
+    }
+
+    void Jump()
+    {
+        Vector3 jumpForces = Vector3.zero;
+
+        if (grounded)
+        {
+            jumpForces = Vector3.up * jumpForce;
+        }
+        
+        rb.AddForce(jumpForces, ForceMode.VelocityChange);
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        Look();
+    }
+
+    public bool Grounded
+    {
+        set => grounded = value;
     }
 }
