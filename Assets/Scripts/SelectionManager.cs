@@ -6,12 +6,13 @@ public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Material defaultMaterial;
-
+    [SerializeField] private float pickupRange = 5.0f;
+    private PickUpController _pickUpController;
     private Transform _selection;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _pickUpController = FindObjectOfType<PickUpController>();
     }
 
     // Update is called once per frame
@@ -25,24 +26,27 @@ public class SelectionManager : MonoBehaviour
         }
         
         // Creating a Ray
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
         // Selection Determination
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (_pickUpController.heldObj == null)
         {
-            var selection = hit.transform;
-            if (selection.CompareTag("Selectable"))
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange))
             {
-                var selectionRenderer = selection.GetComponent<Renderer>();
-                if (selectionRenderer != null)
+                var selection = hit.transform;
+                if (selection.CompareTag("Selectable"))
                 {
-                    selectionRenderer.material = highlightMaterial;
-                }
+                    var selectionRenderer = selection.GetComponent<Renderer>();
+                    if (selectionRenderer != null)
+                    {
+                        selectionRenderer.material = highlightMaterial;
+                    }
 
-                _selection = selection; 
+                    _selection = selection; 
+                }
             }
-           
         }
+       
     }
 }
