@@ -42,7 +42,7 @@ public class PickUpController : MonoBehaviour
         
         if (heldObj != null)
         {
-           // MoveObject();
+           MoveObject();
         }
     }
 
@@ -73,10 +73,12 @@ public class PickUpController : MonoBehaviour
     
     void MoveObject()
     {
-        if (Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f)
+        if (Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.05f)
         {
             Vector3 moveDirection = holdArea.position - heldObj.transform.position;
             heldObjRb.AddForce(moveDirection * pickupForce);
         }
+
+        //heldObj.transform.position = holdArea.position;
     }
 }

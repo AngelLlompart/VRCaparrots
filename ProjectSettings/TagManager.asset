@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Selectable
   - Button
+  - Goal
   layers:
   - Default
   - TransparentFX
