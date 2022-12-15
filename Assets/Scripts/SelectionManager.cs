@@ -32,11 +32,12 @@ public class SelectionManager : MonoBehaviour
         RaycastHit hit;
         if (_pickUpController.heldObj == null)
         {
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange))
+            LayerMask mask = LayerMask.GetMask("Selectable");
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange, mask))
             {
                 var selection = hit.transform;
-                if (selection.CompareTag("Selectable"))
-                {
+                //if (selection.CompareTag("Selectable"))
+                //{
                     var selectionRenderer = selection.GetComponent<Renderer>();
                     if (selectionRenderer != null)
                     {
@@ -44,7 +45,7 @@ public class SelectionManager : MonoBehaviour
                     }
 
                     _selection = selection; 
-                }
+               // }
             }
         }
        

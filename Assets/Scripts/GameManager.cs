@@ -9,11 +9,14 @@ public class GameManager : MonoBehaviour
     public bool end;
 
     [SerializeField] private TextMeshProUGUI username;
-
-    [SerializeField] private InputField userInput;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private TMP_InputField userInput;
     // Start is called before the first frame update
     void Start()
     {
+        _player = GameObject.FindWithTag("Player");
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
         end = false;
         username.gameObject.SetActive(false);
@@ -25,6 +28,9 @@ public class GameManager : MonoBehaviour
     {
         if (end)
         {
+            _player.gameObject.GetComponent<PlayerController>().enabled = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0;
             username.gameObject.SetActive(true);
             userInput.gameObject.SetActive(true);
