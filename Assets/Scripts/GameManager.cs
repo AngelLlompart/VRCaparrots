@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button btnConfirm;
     // Start is called before the first frame update
     void Start()
-    {Debug.Log(Application.persistentDataPath);
+    {
+        Debug.Log(Application.persistentDataPath);
         _player = GameObject.FindWithTag("Player");
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -35,13 +36,7 @@ public class GameManager : MonoBehaviour
     {
         if (end)
         {
-            _player.gameObject.GetComponent<PlayerController>().enabled = false;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0;
-            username.gameObject.SetActive(true);
-            userInput.gameObject.SetActive(true);
-            btnConfirm.gameObject.SetActive(true);
+            EndGame();
         }
     }
 
@@ -71,9 +66,17 @@ public class GameManager : MonoBehaviour
         //Debug.Log(newPlayer.Name);
         //Debug.Log(newPlayer.Points);
 
-        playersInfo = JsonConvert.DeserializeObject<PlayersInfo>(File.ReadAllText(filePath));
-        Debug.Log(playersInfo.PlayersInfos[0].Name);
-
         SceneManager.LoadScene("LadderBoard");
+    }
+
+    private void EndGame()
+    {
+        _player.gameObject.GetComponent<PlayerController>().enabled = false;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0;
+        username.gameObject.SetActive(true);
+        userInput.gameObject.SetActive(true);
+        btnConfirm.gameObject.SetActive(true);
     }
 }
