@@ -29,11 +29,9 @@ public class ObjectComparerGeneral : MonoBehaviour
             {
                 if (hit.transform.CompareTag("Button"))
                 {
-                    Debug.Log("A");
                     StartCoroutine(button(hit.transform));
                     if (goalPlaced[0])
                     {
-                        Debug.Log("B");
                         goals[0].GetComponent<MeshRenderer>().material.color = Color.green;
                     }
                     else
